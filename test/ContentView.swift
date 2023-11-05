@@ -17,6 +17,7 @@ struct URLImage: View {
         if let data = data, let uiimage = UIImage(data: data) {
             Image(uiImage: uiimage)
                 .resizable()
+                .aspectRatio(contentMode: .fit)
                 .frame(width: 50, height: 50)
         } else {
             Image(systemName: "moon.stars.fill")
@@ -48,24 +49,30 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             Form {
-                TextField("Search", text: $searchText)
                 List {
                     ForEach(listings ?? [], id: \.self){ listing in
-                        VStack {
-                            VStack (spacing: 0) {
-                                URLImage(urlString: listing.thumbnail ?? "")
-                                    .background(Color.gray)
-                                Text(listing.company_name).padding()
-                                Text(listing.title).padding()
-                                Text(listing.location).padding()
+                        Section {
+                            NavigationLink(destination: jListing(listing: listing)){
+                                VStack (spacing: 10) {
+                                    URLImage(urlString: listing.thumbnail ?? "")
+                                        .background(Color.gray)
+                                    Text(listing.company_name).padding().bold()
+                                    Text(listing.title).padding()
+                                    Text(listing.location).padding().italic()
+                                    
+                                }.frame(maxWidth: .infinity)
                                 Divider()
                             }
-                            
-                            .padding(3)
                         }
                     }
-                }.navigationTitle("Jobs")
-            }
+                }.navigationTitle("Search").scrollContentBackground(.hidden)
+                Section {
+                    NavigationLink(destination: Saved()) {
+                        Button("Tap to see saved listings") {
+                        }
+                    }
+                }
+            }.searchable(text: $searchText)
         }.onChange(of: searchText) {
             Task {
                 do {
@@ -87,7 +94,7 @@ struct ContentView: View {
 
 func getListings(query: String) async throws -> [Listing] {
     let q = query.replacingOccurrences(of: " ", with: "+")
-    let endpoint = "https://serpapi.com/search?engine=google_jobs&q=\(q)&api_key=1be45fa17abaca95a125fa41109f61b1281f3c34c28cf8100e5217a77b4cd576"
+    let endpoint = "https://serpapi.com/search?engine=google_jobs&q=\(q)&api_key=b6c113642ab075efb2bef6f4d3b9c131ae036d0b70894a4f80e5296c0fa434fa"
     
     guard let url = URL(string: endpoint) else {
         throw custom_error.invalid_url
@@ -117,6 +124,7 @@ struct Listing: Codable, Hashable {
     let company_name: String
     let thumbnail: String?
     let location: String
+    let description: String
 }
 
 struct Listings: Codable {
