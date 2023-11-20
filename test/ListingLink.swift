@@ -4,7 +4,6 @@
 //
 //  Created by Qiu, Men Seng on 20.11.23.
 //
-
 import SwiftUI
 
 struct ListingLink: View {
@@ -23,4 +22,3 @@ struct ListingLink: View {
         }
     }
 }
-

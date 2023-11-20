@@ -34,20 +34,16 @@ struct ContentView: View {
             Task {
                 do {
                     listings = try await getListings(query: searchText)
-                        
+                    
                 } catch custom_error.invalid_url {
                     print("invalid url")
                 } catch custom_error.invalid_data {
-                    print("invalid data")
-                } catch custom_error.invalid_response {
-                    print("invalid response")
-                } catch {
-                    print("unexpected")
                 }
             }
         }
     }
 }
+
 
 #Preview {
     ContentView()
