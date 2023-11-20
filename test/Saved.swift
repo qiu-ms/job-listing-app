@@ -8,24 +8,13 @@
 import SwiftUI
 
 struct Saved: View {
-    @State var l: [Listing]?
+    @State var savedListings: [Listing]?
     var body: some View {
-        if let li = l {
+        if let savedListings = savedListings {
             List {
-                ForEach(li, id: \.self){ li in
-                    NavigationLink(destination: svjListing(listing: li)){
-                        VStack (spacing: 10) {
-                            URLImage(urlString: li.thumbnail ?? "")
-                                .background(Color.gray)
-                            Text(li.company_name).padding().bold()
-                            Text(li.title).padding()
-                            Text(li.location).padding().italic()
-                            
-                        }.frame(maxWidth: .infinity)
-                        Divider()
-                    }
+                ForEach(savedListings, id: \.self){ savedListing in
+                    ListingLink(listing: savedListing, saved: true)
                 }
-                
             }.task {
                 readData()
             }
@@ -38,7 +27,7 @@ struct Saved: View {
     
     private func readData() {
         do {
-            l = try JSONDecoder().decode([Listing].self, from: Data(contentsOf: getDocumentDirectoryPath().appendingPathComponent("output.txt")))
+            savedListings = try JSONDecoder().decode([Listing].self, from: Data(contentsOf: getDocumentDirectoryPath().appendingPathComponent("output.txt")))
             try print(String(bytes: Data(contentsOf: getDocumentDirectoryPath().appendingPathComponent("output.txt")), encoding: String.Encoding.utf8))
         } catch {
             print("rip read")
