@@ -13,7 +13,9 @@ struct Saved: View {
         if let savedListings = savedListings {
             List {
                 ForEach(savedListings, id: \.self){ savedListing in
-                    ListingLink(listing: savedListing, saved: true)
+                    Section {
+                        ListingLink(listing: savedListing, saved: true)
+                    }
                 }
             }.task {
                 readData()

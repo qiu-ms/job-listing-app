@@ -54,8 +54,9 @@ struct URLImage: View {
 }
 
 func getListings(query: String) async throws -> [Listing] {
-    let q = query.replacingOccurrences(of: " ", with: "+")
-    let endpoint = "https://serpapi.com/search?engine=google_jobs&q=\(q)&api_key=1be45fa17abaca95a125fa41109f61b1281f3c34c28cf8100e5217a77b4cd576"
+    //let q = query.replacingOccurrences(of: " ", with: "+")
+    //let endpoint = "https://serpapi.com/search?engine=google_jobs&q=\(q)&api_key=1be45fa17abaca95a125fa41109f61b1281f3c34c28cf8100e5217a77b4cd576"
+    let endpoint = "http://127.0.0.1:8080"
     
     guard let url = URL(string: endpoint) else {
         throw custom_error.invalid_url
